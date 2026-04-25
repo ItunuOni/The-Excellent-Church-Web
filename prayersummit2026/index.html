@@ -97,6 +97,36 @@
             grid-template-columns: repeat(2, 1fr); /* Changed from 3 to 2 columns */
             gap: 25px;
         }
+
+        /* --- SPLIT LAYOUT (LEFT CARDS, RIGHT SLIDER) --- */
+        .split-container {
+            max-width: 1200px; margin: 0 auto 100px; padding: 0 5%;
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start;
+        }
+        
+        .bento-left { display: flex; flex-direction: column; gap: 25px; }
+        .bento-left .glass-card { padding: 30px; }
+
+        /* Flyer Slider Styles */
+        .slider-right {
+            position: sticky; top: 100px; /* Keeps the slider floating on screen as you scroll past the cards */
+            width: 100%; border-radius: 24px; overflow: hidden;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            aspect-ratio: 4/5; /* Standard flyer shape */
+        }
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0;
+            transition: opacity 1s ease-in-out; /* Smooth fade effect */
+        }
+        .slide.active { opacity: 1; }
+
+        @media (max-width: 900px) {
+            .split-container { grid-template-columns: 1fr; }
+            .slider-right { position: relative; top: 0; }
+        }
+
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
@@ -160,6 +190,18 @@
         /* --- SCROLL ANIMATIONS --- */
         .animate-on-scroll { opacity: 0; transform: translateY(40px); transition: 0.8s ease-out; }
         .is-visible { opacity: 1; transform: translateY(0); }
+
+        /* --- MOBILE RESPONSIVENESS FIXES --- */
+        @media (max-width: 768px) {
+            .brand-logo { height: 40px; } /* Shrinks the logo image slightly */
+            .logo-text { font-size: 1rem; } /* Shrinks the main text */
+            .logo-subtext { font-size: 0.65rem; }
+            .back-btn { padding: 6px 12px; font-size: 0.8rem; } /* Makes the button smaller */
+            .brand-container { gap: 8px; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero-theme { font-size: 1.3rem; }
+        }
+
     </style>
 </head>
 <body>
@@ -181,7 +223,7 @@
             </div>
 
         </a>
-        <a href="index.html" class="back-btn">Return Home</a>
+        <a href="../index.html" class="back-btn">Return Home</a>
     </nav>
 
     <header class="hero animate-on-scroll">
@@ -193,34 +235,42 @@
         <p>Step into a powerful atmosphere of intense prayer, renewal, and divine encounters. This is more than a gathering it’s a moment to realign your life.</p>
     </header>
 
-    <section class="bento-container">
-        <div class="glass-card animate-on-scroll">
-            <h3>What to Expect</h3>
-            <ul class="feature-list">
-                <li>Powerful & focused prayer</li>
-                <li>Deep spiritual encounters</li>
-                <li>Refreshing transformation</li>
-                <li>Community & fellowship</li>
-            </ul>
-        </div>
+    <section class="split-container">
+        
+        <div class="bento-left">
+            <div class="glass-card animate-on-scroll">
+                <h3>What to Expect</h3>
+                <ul class="feature-list">
+                    <li>Powerful & focused prayer</li>
+                    <li>Deep spiritual encounters</li>
+                    <li>Refreshing transformation</li>
+                    <li>Community & fellowship</li>
+                </ul>
+            </div>
 
-        <div class="glass-card animate-on-scroll">
-            <h3>Event Details</h3>
-            <p><strong>Date:</strong><br>Sunday, 24th May, 2026</p>
-            <br>
-            <p><strong>Venue:</strong><br>The Excellent Church, 3rd floor, 14 Montgomery Road, Yaba, Lagos.</p>
-        </div>
+            <div class="glass-card animate-on-scroll">
+                <h3>Event Details</h3>
+                <p><strong>Date:</strong><br>Sunday, 24th May, 2026</p><br>
+                <p><strong>Venue:</strong><br>The Excellent Church, 3rd floor, 14 Montgomery Road, Yaba, Lagos.</p>
+            </div>
 
-        <div class="glass-card span-2 animate-on-scroll">
-            <h3>Easy Access Across Lagos</h3>
-            <p style="margin-bottom: 15px;">We’ve made it easy for you to attend. Free buses will be available from key locations. Bring your tribe come with your friends, your community, and everyone hungry for more of God.</p>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 UNILAG</span>
-                <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 YABATECH</span>
-                <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 FCE</span>
-                <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 Other Locations</span>
+            <div class="glass-card animate-on-scroll">
+                <h3>Easy Access Across Lagos</h3>
+                <p style="margin-bottom: 15px;">We've made it easy for you to attend. Free buses will be available from key locations. Bring your tribe—come with your friends, your community, and everyone hungry for more of God.</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 UNILAG</span>
+                    <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 YABATECH</span>
+                    <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 FCE</span>
+                    <span style="background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; font-size: 0.9rem;">📍 Other Locations</span>
+                </div>
             </div>
         </div>
+
+        <div class="slider-right animate-on-scroll">
+            <img src="Prayer Summit-1.jpg" alt="Prayer Summit Flyer" class="slide active">
+            <img src="Prayer Summit-2.jpg" alt="Prayer Summit Location" class="slide">
+        </div>
+
     </section>
 
     <section class="form-section animate-on-scroll">
@@ -303,6 +353,19 @@
                 alert("Network error. Please check your connection and try again.");
             }
         });
+
+
+        // --- FLYER SLIDER LOGIC ---
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+
+        // Change the flyer image every 4 seconds
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 7000);
+
     </script>
 </body>
 </html>
