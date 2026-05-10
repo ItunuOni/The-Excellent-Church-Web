@@ -313,8 +313,29 @@
         </div>
     </section>
 
-    <script>
-        // --- SCROLL ANIMATION LOGIC ---
+    <script type="module">
+        // ==========================================
+        // 1. FIREBASE IMPORTS & SETUP
+        // ==========================================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvsor8VRycpuyv1avPipakZ69Qo6stQdI",
+            authDomain: "tec-prayer-summit.firebaseapp.com",
+            databaseURL: "https://tec-prayer-summit-default-rtdb.firebaseio.com",
+            projectId: "tec-prayer-summit",
+            storageBucket: "tec-prayer-summit.firebasestorage.app",
+            messagingSenderId: "1001613538358",
+            appId: "1:1001613538358:web:39f1c40176b57f80389497"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ==========================================
+        // 2. SCROLL ANIMATION LOGIC (Restored)
+        // ==========================================
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -325,7 +346,23 @@
 
         document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
 
-        // --- BACKGROUND FORM SUBMISSION ---
+        // ==========================================
+        // 3. FLYER SLIDER LOGIC (Restored)
+        // ==========================================
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        
+        if (slides.length > 0) {
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 7000);
+        }
+
+        // ==========================================
+        // 4. FORM SUBMISSION (Firebase + Formspree)
+        // ==========================================
         const form = document.getElementById('regForm');
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
@@ -337,6 +374,16 @@
             const data = new FormData(form);
             
             try {
+                // A. Save to Firebase (Admin Dashboard)
+                await addDoc(collection(db, "summit_registrations"), {
+                    fullName: data.get('fullName'),
+                    email: data.get('email'),
+                    phone: data.get('phone'),
+                    busLocation: data.get('busLocation'),
+                    timestamp: serverTimestamp() 
+                });
+
+                // B. Save to Formspree (Email Notification)
                 const response = await fetch(form.action, {
                     method: form.method,
                     body: data,
@@ -344,29 +391,17 @@
                 });
                 
                 if (response.ok) {
-                    window.location.href = "thanks.html"; // Redirects to your custom success page
+                    window.location.href = "thanks.html"; 
                 } else {
                     btn.innerText = originalText;
                     alert("Oops! There was a problem submitting your form. Please try again.");
                 }
             } catch (error) {
+                console.error("Database Error: ", error);
                 btn.innerText = originalText;
                 alert("Network error. Please check your connection and try again.");
             }
         });
-
-
-        // --- FLYER SLIDER LOGIC ---
-        const slides = document.querySelectorAll('.slide');
-        let currentSlide = 0;
-
-        // Change the flyer image every 4 seconds
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }, 7000);
-
     </script>
 </body>
 </html>
