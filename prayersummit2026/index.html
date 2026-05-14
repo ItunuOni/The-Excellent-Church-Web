@@ -369,7 +369,12 @@
             
             const btn = form.querySelector('.btn-submit');
             const originalText = btn.innerText;
+            
+            // 1. Change text AND physically lock the button
             btn.innerText = "Securing Seat...";
+            btn.disabled = true; 
+            btn.style.opacity = "0.7"; 
+            btn.style.cursor = "not-allowed";
             
             const data = new FormData(form);
             
@@ -393,12 +398,20 @@
                 if (response.ok) {
                     window.location.href = "thanks.html"; 
                 } else {
+                    // Unlock the button if Formspree fails
                     btn.innerText = originalText;
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                    btn.style.cursor = "pointer";
                     alert("Oops! There was a problem submitting your form. Please try again.");
                 }
             } catch (error) {
                 console.error("Database Error: ", error);
+                // Unlock the button if Firebase fails
                 btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
                 alert("Network error. Please check your connection and try again.");
             }
         });
